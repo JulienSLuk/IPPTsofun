@@ -1,4 +1,4 @@
-Sub ExtractColumnsToOutputWithConditions()
+Sub ExtractColumnsToFilteredWithConditions()
     Dim wsSource As Worksheet
     Dim wsFiltered As Worksheet
     Dim lastRowSource As Long
@@ -12,7 +12,7 @@ Sub ExtractColumnsToOutputWithConditions()
     ' Find the last row in column A of the source sheet
     lastRowSource = wsSource.Cells(wsSource.Rows.Count, "A").End(xlUp).Row
     
-    ' Initialize the output row to start from row 2 (to preserve headers)
+    ' Initialize the filtered row to start from row 2 (to preserve headers)
     filteredRow = 2
     
     ' Loop through each row in the source sheet starting from row 2
@@ -24,20 +24,22 @@ Sub ExtractColumnsToOutputWithConditions()
             If wsSource.Cells(cell.Row, "U").Value = "IPPT" Then
                 ' Column V must be "FAIL" or "NOT TAKEN"
                 If wsSource.Cells(cell.Row, "V").Value = "FAIL" Or wsSource.Cells(cell.Row, "V").Value = "NOT TAKEN" Then
-                    ' Copy columns A, B, C, D, E, F, G, M, H, I, J to the output sheet
-                    wsFiltered.Cells(filteredRow, 1).Value = wsSource.Cells(cell.Row, "A").Value ' Column A
-                    wsFiltered.Cells(filteredRow, 2).Value = wsSource.Cells(cell.Row, "B").Value ' Column B
-                    wsFiltered.Cells(filteredRow, 3).Value = wsSource.Cells(cell.Row, "C").Value ' Column C
-                    wsFiltered.Cells(filteredRow, 4).Value = wsSource.Cells(cell.Row, "D").Value ' Column D
-                    wsFiltered.Cells(filteredRow, 5).Value = wsSource.Cells(cell.Row, "E").Value ' Column E
-                    wsFiltered.Cells(filteredRow, 6).Value = wsSource.Cells(cell.Row, "F").Value ' Column F
-                    wsFiltered.Cells(filteredRow, 7).Value = wsSource.Cells(cell.Row, "G").Value ' Column G
-                    wsFiltered.Cells(filteredRow, 8).Value = wsSource.Cells(cell.Row, "M").Value ' Column M
-                    wsFiltered.Cells(filteredRow, 9).Value = wsSource.Cells(cell.Row, "H").Value ' Column H
-                    wsFiltered.Cells(filteredRow, 10).Value = wsSource.Cells(cell.Row, "I").Value ' Column I
-                    wsFiltered.Cells(filteredRow, 11).Value = wsSource.Cells(cell.Row, "J").Value ' Column J
+                    ' Copy columns A, ... to the filtered sheet
+                    wsFiltered.Cells(filteredRow, 1).Value = wsSource.Cells(cell.Row, "A").Value ' ID
+                    wsFiltered.Cells(filteredRow, 2).Value = wsSource.Cells(cell.Row, "B").Value ' NAME
+                    wsFiltered.Cells(filteredRow, 3).Value = wsSource.Cells(cell.Row, "C").Value ' DEPT
+                    wsFiltered.Cells(filteredRow, 4).Value = wsSource.Cells(cell.Row, "D").Value ' AGE
+                    wsFiltered.Cells(filteredRow, 5).Value = wsSource.Cells(cell.Row, "E").Value ' ADDRESS
+                    wsFiltered.Cells(filteredRow, 6).Value = wsSource.Cells(cell.Row, "F").Value ' PHONE
+                    wsFiltered.Cells(filteredRow, 7).Value = wsSource.Cells(cell.Row, "G").Value ' EMAIL
+                    wsFiltered.Cells(filteredRow, 8).Value = wsSource.Cells(cell.Row, "M").Value ' YEAR TYPE
+                    wsFiltered.Cells(filteredRow, 9).Value = wsSource.Cells(cell.Row, "I").Value ' START DATE
+                    wsFiltered.Cells(filteredRow, 10).Value = wsSource.Cells(cell.Row, "J").Value ' END DATE
+                    wsFiltered.Cells(filteredRow, 12).Value = wsSource.Cells(cell.Row, "V").Value ' REMARKS
+                    wsFiltered.Cells(filteredRow, 13).Value = wsSource.Cells(cell.Row, "U").Value ' STATUS
+
                     
-                    ' Move to the next output row
+                    ' Move to the next filtered row
                     filteredRow = filteredRow + 1
                 End If
             End If
