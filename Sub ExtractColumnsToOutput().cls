@@ -1,38 +1,44 @@
-Sub ExtractColumnsToOutput()
+Sub ExtractColumnsToOutputWithConditions()
     Dim wsSource As Worksheet
     Dim wsOutput As Worksheet
     Dim lastRowSource As Long
-    Dim lastRowOutput As Long
     Dim outputRow As Long
     Dim cell As Range
 
     ' Set worksheets
     Set wsSource = ThisWorkbook.Sheets("NSF IPPT")
-    Set wsOutput = ThisWorkbook.Sheets("output")
+    Set wsOutput = ThisWorkbook.Sheets("Output")
     
     ' Find the last row in column A of the source sheet
     lastRowSource = wsSource.Cells(wsSource.Rows.Count, "A").End(xlUp).Row
     
-    ' Find the last row in the output sheet to append data
-    lastRowOutput = wsOutput.Cells(wsOutput.Rows.Count, "A").End(xlUp).Row + 1
-    
     ' Initialize the output row to start from row 2 (to preserve headers)
     outputRow = 2
     
-    ' Loop through each row in the source sheet and copy required columns
+    ' Loop through each row in the source sheet starting from row 2
     For Each cell In wsSource.Range("A2:A" & lastRowSource)
-        ' Copy the data from each specified column
-        wsOutput.Cells(outputRow, 1).Value = cell.Value          ' Column A
-        wsOutput.Cells(outputRow, 2).Value = cell.Offset(0, 1).Value ' Column B
-        wsOutput.Cells(outputRow, 3).Value = cell.Offset(0, 2).Value ' Column C
-        wsOutput.Cells(outputRow, 4).Value = cell.Offset(0, 3).Value ' Column D
-        wsOutput.Cells(outputRow, 5).Value = cell.Offset(0, 4).Value ' Column E
-        wsOutput.Cells(outputRow, 6).Value = cell.Offset(0, 5).Value ' Column F
-        wsOutput.Cells(outputRow, 7).Value = cell.Offset(0, 6).Value ' Column G
-        wsOutput.Cells(outputRow, 8).Value = cell.Offset(0, 8).Value ' Column M
-        
-        ' Move to the next row in the output sheet
-        outputRow = outputRow + 1
+        ' Check pre-conditions:
+        ' Column M must be "Year 1" or "Year 2"
+        If wsSource.Cells(cell.Row, "M").Value = "Year 1" Or wsSource.Cells(cell.Row, "M").Value = "Year 2" Then
+            ' Column U must be "IPPT"
+            If wsSource.Cells(cell.Row, "U").Value = "IPPT" Then
+                ' Column V must be "FAIL" or "NOT TAKEN"
+                If wsSource.Cells(cell.Row, "V").Value = "FAIL" Or wsSource.Cells(cell.Row, "V").Value = "NOT TAKEN" Then
+                    ' Copy columns A, B, C, D, E, F, G, and M to the output sheet
+                    wsOutput.Cells(outputRow, 1).Value = wsSource.Cells(cell.Row, "A").Value ' Column A
+                    wsOutput.Cells(outputRow, 2).Value = wsSource.Cells(cell.Row, "B").Value ' Column B
+                    wsOutput.Cells(outputRow, 3).Value = wsSource.Cells(cell.Row, "C").Value ' Column C
+                    wsOutput.Cells(outputRow, 4).Value = wsSource.Cells(cell.Row, "D").Value ' Column D
+                    wsOutput.Cells(outputRow, 5).Value = wsSource.Cells(cell.Row, "E").Value ' Column E
+                    wsOutput.Cells(outputRow, 6).Value = wsSource.Cells(cell.Row, "F").Value ' Column F
+                    wsOutput.Cells(outputRow, 7).Value = wsSource.Cells(cell.Row, "G").Value ' Column G
+                    wsOutput.Cells(outputRow, 8).Value = wsSource.Cells(cell.Row, "M").Value ' Column M
+                    
+                    ' Move to the next output row
+                    outputRow = outputRow + 1
+                End If
+            End If
+        End If
     Next cell
     
     ' Notify user of completion
